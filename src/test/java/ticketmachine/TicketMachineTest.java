@@ -67,13 +67,19 @@ class TicketMachineTest {
 
 	// S8 : refund() remet la balance à zéro
 	void balanceZero() {
+		machine.insertMoney(20);
+		machine.refund();
 		assertEquals(0 , machine.getBalance(), "La balance est remise à zéro");
 	}
 
 	// S9 : on ne peut pas insérer un montant négatif
 	void montantNeg() {
-		machine.insertMoney(-10);
-		assertEquals(-10 , machine.getBalance(), "Le montant ne peut pas être négatif");
+		assertThrows(IllegalArgumentException.class, () -> {machine.insertMoney(-10);},  "La machine ne doit pas recevoir des montants négatifs");
+	}
+
+	// S10 : on ne peut pas créer de machine qui délivre des tickets dont le prix est négatif
+	void noTicketForNegPrice(){
+		assertThrows(IllegalArgumentException.class, () -> {new TicketMachine(-1);}, "");
 	}
 
 }
